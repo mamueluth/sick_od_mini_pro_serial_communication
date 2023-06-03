@@ -17,6 +17,7 @@ STX = b'\x02'  # STX marker (hex code 02)
 ETX = b'\x03'  # ETX marker (hex code 03)
 
 # Helper function to calculate BCC
+# not working carry over is missing!
 def calculate_bcc(data):
     bcc = 0
     print(f"bcc:={bcc}")
@@ -68,16 +69,18 @@ def receive_data():
 
         if ser.read(1) == STX:
                 frame = ser.read(5)
-                print(f"received:{frame}")
+                #print(f"received:{frame}")
+                data = frame[1:3]
+                print(int.from_bytes(data, byteorder='big', signed=True)/100.0)
+
+
+
 
     # Read the remaining frame
     frame = ser.read(6)  # 6 is the total length of the frame without BCC
 
     # Extract the fields
-    ack = frame[0:3]
-    response1 = frame[3:4]
-    response2 = frame[4:5]
-    etx = frame[5:6]
+
 
     # Verify the ETX marker
     if etx == ETX:
