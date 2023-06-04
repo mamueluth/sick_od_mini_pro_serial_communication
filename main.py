@@ -116,7 +116,7 @@ if __name__=="__main__":
         bytesize=serial.EIGHTBITS,
         stopbits=serial.STOPBITS_ONE,
         parity=serial.PARITY_NONE,
-        timeout=1 # don't know if should set to 0...
+        timeout=0 # don't know if should set to 0...
     )
 
     print(f"Starting to read sensor_values: {ser}")
