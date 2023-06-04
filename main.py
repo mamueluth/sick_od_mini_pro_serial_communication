@@ -37,8 +37,6 @@ READ_SENSOR_VALUE = STX + C + b'\xb0' + b'\x01' + ETX + BCC_READ_SENSOR_VALUE
 def send_read_sensor_value(ser):
     ser.setRTS(True)
     ser.write(READ_SENSOR_VALUE)
-    ser.flush()
-    ser.setRTS(False)
 
 def calculate_value(package):
     ack = package[0:1]
@@ -56,7 +54,7 @@ def calculate_value(package):
         # by 100 to get "correct" value
         return int.from_bytes(res1 + res2, byteorder='big', signed=True) / 100.0
     # no vali data received
-    return foat('NaN')
+    return float('NaN')
 
 def read_sensor_values(ser, file_to_store, print_values):
     file = None
