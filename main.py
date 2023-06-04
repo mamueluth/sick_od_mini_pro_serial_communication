@@ -1,4 +1,6 @@
 import argparse
+import csv
+import os
 import serial
 import sys
 import time
@@ -57,7 +59,20 @@ def calculate_value(package):
     return foat('NaN')
 
 def read_sensor_values(ser, file_to_store, print_values):
-
+    file = None
+    writer = None
+    if file_to_store:
+        if not file_to_store.endswith('.csv'):
+            file_to_store += '.csv'
+        if os.path.exists(file_to_store):
+            print(f"Give file:{file_to_store} exists. Aborting.")
+            ser.close()
+            return
+        file = open(file_to_store, 'a', newline='')
+        try:
+            writer = csv.writer(file)
+        except:
+            file.close()
     try:
         while True:
             send_read_sensor_value(ser)
@@ -70,11 +85,17 @@ def read_sensor_values(ser, file_to_store, print_values):
                     package = ser.read(5)
                     current_time = time.time_ns()
                     value = calculate_value(package)
+                    if file is not None:
+                        data = [current_time, value]
+                        writer.writerow(data)
                     if print_values:
                         print(f"{value} at time {current_time}")
     except KeyboardInterrupt:
         print("closing serial connection")
         ser.close()
+        if file:
+            print("closing file")
+            file.close()
 
 if __name__=="__main__":
     args = parse_cli_args()
