@@ -71,6 +71,8 @@ def read_sensor_values(ser, file_to_store, print_values):
         file = open(file_to_store, 'a', newline='')
         try:
             writer = csv.writer(file)
+            header = ["Time", "Value"]
+            writer.writerow(header)
         except:
             file.close()
     try:
