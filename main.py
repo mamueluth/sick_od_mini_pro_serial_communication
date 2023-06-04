@@ -17,8 +17,8 @@ ACK = b'\x06'   # ACK marker (hex code 06)
 NAK = b'\x15'   # NAK marker (hex code 15)
 ETX = b'\x03'   # ETX marker (hex code 03)
 C = b'\x43'     # Command for reading out measurement value / output status
-BCC_READ_MESSURMENT = b'\xf2'
-READ_MEASSURMENT = STX + C + b'\xb0' + b'\x01' + ETX + BCC_READ_MESSURMENT
+BCC_READ_SENSOR_VALUE = b'\xf2'
+READ_SENSOR_VALUE = STX + C + b'\xb0' + b'\x01' + ETX + BCC_READ_SENSOR_VALUE
 
 # Helper function to calculate BCC
 # NOT WORKING carry over is missing!
@@ -33,7 +33,7 @@ READ_MEASSURMENT = STX + C + b'\xb0' + b'\x01' + ETX + BCC_READ_MESSURMENT
 
 def send_read_sensor_value(ser):
     ser.setRTS(True)
-    ser.write(READ_MEASSURMENT)
+    ser.write(READ_SENSOR_VALUE)
     ser.flush()
     ser.setRTS(False)
 
