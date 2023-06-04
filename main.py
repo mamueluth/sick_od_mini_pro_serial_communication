@@ -1,11 +1,12 @@
 import argparse
 import serial
 import sys
+import time
 
 def parse_cli_args():
     parser = argparse.ArgumentParser(description='od mini pro cli.')
     parser.add_argument('port', type=str, help='Serial port which is opened.')
-    parser.add_argument('--baud_rate', '-b', type=int, choices=[9600, 19200, 38400], default=9600, help='Baud rate usde for the serial conncetion.')
+    parser.add_argument('--baud_rate', '-b', type=int, choices=[9600, 19200, 38400, 57600, 115200, 230400, 312000, 460000, 500000, 625000, 833000, 920000, 1250000], default=9600, help='Baud rate usde for the serial conncetion.')
     parser.add_argument('--print_values', '-p', action='store_true', help='Print values the values on the console.')
     parser.add_argument('--store', '-s', type=str,nargs='?', default='',  help='File which the sensor values are stored in. If no file name is given sensor values are not stored.')
 
@@ -67,9 +68,10 @@ def read_sensor_values(ser, file_to_store, print_values):
             if ser.read(1) == STX:
                     # receive last 5 byte of package
                     package = ser.read(5)
+                    current_time = time.time_ns()
                     value = calculate_value(package)
                     if print_values:
-                        print(value)
+                        print(f"{value} at time {current_time}")
     except KeyboardInterrupt:
         print("closing serial connection")
         ser.close()
