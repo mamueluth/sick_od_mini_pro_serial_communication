@@ -17,6 +17,12 @@ def plot_data(file_name):
     # Extract the time and value columns from the DataFrame
     time_ns = df['Time']
     values = df['Value']
+    #replace to near or to far with nan
+    values[values > 300] = float('NaN')
+    # calculate samples per second
+    start = time_ns.head(1).values[0]
+    stop = time_ns.tail(1).values[0]
+    samples_per_second = len(values)/((stop - start) / 1e9)
 
     # Convert time to milliseconds for better visualization
     time_ms = time_ns / 1e6
@@ -26,7 +32,7 @@ def plot_data(file_name):
     plt.xlabel('Time (ms)')
     plt.ylabel('Value')
     filename_without_extension = os.path.splitext(file_name)[0]
-    plt.title(filename_without_extension)
+    plt.title(filename_without_extension + f" | [samples per second {samples_per_second}]")
     plt.grid(True)
     plt.show()
 
