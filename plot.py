@@ -23,6 +23,8 @@ def plot_data(file_name):
     start = time_ns.head(1).values[0]
     stop = time_ns.tail(1).values[0]
     samples_per_second = len(values)/((stop - start) / 1e9)
+    # shift start everything relative to start:
+    time_ns = time_ns - start
 
     # Convert time to milliseconds for better visualization
     time_ms = time_ns / 1e6
